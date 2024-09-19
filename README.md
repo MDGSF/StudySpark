@@ -95,3 +95,27 @@ rdd.aggregateByKey(初始值)(f1, f2)
 
 - 升序排序：调用 sortByKey()、或者 sortByKey(true)；
 - 降序排序：调用 sortByKey(false)。
+
+#### union
+
+它常常用于把两个类型一致、但来源不同的 RDD 进行合并
+
+```scala
+rdd1.union(rdd2)
+```
+
+#### sample
+
+```scala
+sample(withReplacement, fraction, seed)
+```
+
+- withReplacement 的类型是 Boolean，它的含义是“采样是否有放回”，如果这个参数的值是 true，那么采样结果中可能会包含重复的数据记录，相反，如果该值为 false，那么采样结果不存在重复记录。
+- fraction 它的类型是 Double，值域为 0 到 1，其含义是采样比例，也就是结果集与原数据集的尺寸比例。
+- seed 参数是可选的，用于控制每次采样的结果是否一致。
+
+#### repartition
+
+可以使用 repartition 算子随意调整（提升或降低）RDD 的并行度，而 coalesce 算子则只能用于降低 RDD 并行度。
+
+#### coalesce
