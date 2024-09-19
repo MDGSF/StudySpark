@@ -4,6 +4,9 @@
 - spark on k8s: <https://spark.apache.org/docs/latest/running-on-kubernetes.html>
 - rdd: <https://spark.apache.org/docs/latest/rdd-programming-guide.html>
 - spark configuration: <https://spark.apache.org/docs/latest/configuration.html>
+- <https://sparkbyexamples.com/>
+- <https://github.com/spark-examples/pyspark-examples>
+- <https://github.com/jadianes/spark-py-notebooks>
 
 ```sh
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyspark
