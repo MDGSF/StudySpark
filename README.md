@@ -55,5 +55,20 @@ MASTER=spark://node0:7077 $SPARK_HOME/bin/run-example org.apache.spark.examples.
 
 - map、mapPartitions、flatMap 和 filter
   - 不会引入 shuffle
+  - 使用范围：任意 RDD
 - groupByKey、reduceByKey、aggregateByKey 和 sortByKey
   - 会引入 shuffle
+  - 使用范围：Paired RDD
+  - reduceByKey 算子的局限性，在于其 Map 阶段与 Reduce 阶段的计算逻辑必须保持一致，这个计算逻辑统一由聚合函数 f 定义。
+  - aggregateByKey 算子，Map 阶段与 Reduce 阶段的计算逻辑可以不同。
+
+#### aggregateByKey
+
+```scala
+val rdd: RDD[(Key类型，Value类型)] = _
+rdd.aggregateByKey(初始值)(f1, f2)
+```
+
+- 初始值类型，必须与 f2 的结果类型保持一致；
+- f1 的形参类型，必须与 Paired RDD 的 Value 类型保持一致；
+- f2 的形参类型，必须与 f1 的结果类型保持一致。
