@@ -12,10 +12,13 @@ docker run -it --rm spark:3.5.2-scala2.12-java17-python3-ubuntu bash
 docker run -it --rm spark:3.5.2-scala2.12-java17-python3-ubuntu /opt/spark/bin/spark-shell
 docker run -it --rm spark:3.5.2-scala2.12-java17-python3-ubuntu /opt/spark/bin/pyspark
 
-
 docker run -it --rm \
   -v $(pwd):/opt/spark/work-dir \
   spark:3.5.2-scala2.12-java17-python3-ubuntu /opt/spark/bin/spark-shell
+
+docker run -it --rm \
+  -v $(pwd):/opt/spark/work-dir \
+  spark:3.5.2-scala2.12-java17-python3-ubuntu /opt/spark/bin/pyspark
 
 docker run -it --rm \
   -v $(pwd):/opt/spark/work-dir \
@@ -50,6 +53,30 @@ MASTER=spark://node0:7077 $SPARK_HOME/bin/run-example org.apache.spark.examples.
 - “–master yarn”就代表 YARN 模式
 
 用一句话来概括从 DAG 到 Stages 的拆分过程，那就是：以 Actions 算子为起点，从后向前回溯 DAG，以 Shuffle 操作为边界去划分 Stages。
+
+### 数据处理生命周期
+
+- 数据加载
+  - parallelize
+  - textFile
+- 数据准备
+  - union
+  - sample
+- 数据预处理
+  - coalesce
+  - repartition
+- 数据处理
+  - map
+  - flatMap
+  - filter
+  - sortByKey
+  - reduceByKey
+  - aggregateByKey
+- 结果收集
+  - take
+  - first
+  - collect
+  - saveAsTextFile
 
 ### 常用算子
 
@@ -133,3 +160,19 @@ sample(withReplacement, fraction, seed)
 coalesce 算子则只能用于降低 RDD 并行度。
 
 coalesce 用法和 repartition 一样，但是不会引入 Shuffle。
+
+#### first
+
+#### take
+
+#### collect
+
+collect 算子有两处性能隐患，一个是拉取数据过程中引入的网络开销，另一个 Driver 的 OOM（内存溢出，Out of Memory）
+
+#### saveAsTextFile
+
+```scala
+saveAsTextFile(path: String)
+```
+
+其中 path 代表的是目标文件系统目录，它可以是本地文件系统，也可以是 HDFS、Amazon S3 等分布式文件系统。
