@@ -60,6 +60,12 @@ MASTER=spark://node0:7077 $SPARK_HOME/bin/run-example org.apache.spark.examples.
   - 会引入 shuffle，会有性能隐患
   - 使用范围：Paired RDD
 
+#### toDebugString
+
+```python
+rdd.toDebugString()
+```
+
 #### map
 
 #### mapPartitions
@@ -118,4 +124,12 @@ sample(withReplacement, fraction, seed)
 
 可以使用 repartition 算子随意调整（提升或降低）RDD 的并行度，而 coalesce 算子则只能用于降低 RDD 并行度。
 
+结合经验来说，把并行度设置为可用 CPU 的 2 到 3 倍，往往是个不错的开始。
+
+这个算子有个致命的弊端，那就是它会引入 Shuffle。
+
 #### coalesce
+
+coalesce 算子则只能用于降低 RDD 并行度。
+
+coalesce 用法和 repartition 一样，但是不会引入 Shuffle。
