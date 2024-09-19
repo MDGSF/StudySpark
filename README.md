@@ -92,6 +92,14 @@ conf.set("spark.executor.memory", "4g")
 conf.set("spark.local.dir", "/ssd_fs/large_dir")   
 ```
 
+### Spark SQL
+
+- SparkContext 通过 textFile API 把源数据转换为 RDD
+- SparkSession 通过 read API 把源数据转换为 DataFrame
+- DataFrame 是一种带 Schema 的分布式数据集
+- DataFrame 背后的计算引擎是 Spark SQL
+- RDD 的计算引擎是 Spark Core
+
 ### 数据处理生命周期
 
 - 数据加载
