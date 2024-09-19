@@ -176,3 +176,7 @@ saveAsTextFile(path: String)
 ```
 
 其中 path 代表的是目标文件系统目录，它可以是本地文件系统，也可以是 HDFS、Amazon S3 等分布式文件系统。
+
+### 共享变量
+
+Spark 提供了两类共享变量，分别是广播变量（Broadcast variables）和累加器（Accumulators）
