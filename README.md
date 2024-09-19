@@ -180,3 +180,21 @@ saveAsTextFile(path: String)
 ### 共享变量
 
 Spark 提供了两类共享变量，分别是广播变量（Broadcast variables）和累加器（Accumulators）
+
+#### 广播变量（Broadcast variables）
+
+在 Driver 与 Executors 之间，普通变量的分发与存储，是以 Task 为粒度的，因此，它所引入的网络与内存开销，会成为作业执行性能的一大隐患。
+
+在使用广播变量的情况下，数据内容的分发粒度变为以 Executors 为单位。
+
+当你遇到需要多个 Task 共享同一个大型变量（如列表、数组、映射等数据结构）的时候，就可以考虑使用广播变量来优化你的 Spark 作业。
+
+#### 累加器（Accumulators）
+
+主要作用是全局计数（Global counter）
+
+- longAccumulator 定义Long类型的累加器
+- doubleAccumulator 用于对 Double 类型的数值做全局计数；
+- 而 collectionAccumulator 允许开发者定义集合类型的累加器
+
+就这 3 种累加器来说，尽管类型不同，但它们的用法是完全一致的。都是先定义累加器变量，然后在 RDD 算子中调用 add 函数，从而更新累加器状态，最后通过调用 value 函数来获取累加器的最终结果。
