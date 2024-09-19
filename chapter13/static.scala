@@ -19,16 +19,12 @@ val filteredLuckyDogs: DataFrame = luckyDogsDF.filter(col("batchNum") >= "201601
 val jointDF: DataFrame = applyNumbersDF.join(filteredLuckyDogs, Seq("carNum"), "inner")
  
 // 以batchNum、carNum做分组，统计倍率系数
-val multipliers: DataFrame = jointDF.groupBy(col("batchNum"),col("carNum"))
-.agg(count(lit(1)).alias("multiplier"))
+val multipliers: DataFrame = jointDF.groupBy(col("batchNum"),col("carNum")).agg(count(lit(1)).alias("multiplier"))
  
 // 以carNum做分组，保留最大的倍率系数
-val uniqueMultipliers: DataFrame = multipliers.groupBy("carNum")
-.agg(max("multiplier").alias("multiplier"))
+val uniqueMultipliers: DataFrame = multipliers.groupBy("carNum").agg(max("multiplier").alias("multiplier"))
  
 // 以multiplier倍率做分组，统计人数
-val result: DataFrame = uniqueMultipliers.groupBy("multiplier")
-.agg(count(lit(1)).alias("cnt"))
-.orderBy("multiplier")
+val result: DataFrame = uniqueMultipliers.groupBy("multiplier").agg(count(lit(1)).alias("cnt")).orderBy("multiplier")
  
 result.collect
