@@ -25,6 +25,13 @@ docker run -it --rm \
   -v $(pwd):/opt/spark/work-dir \
   spark:3.5.2-scala2.12-java17-python3-ubuntu bash -c \
   "/opt/spark/bin/spark-submit count_word.py"
+
+
+docker run -it --rm \
+  -v $(pwd):/opt/spark/work-dir \
+  spark:3.5.2-scala2.12-java17-python3-ubuntu /opt/spark/bin/pyspark \
+  --conf spark.executor.cores=4 \
+  --conf spark.executor.memory=8g
 ```
 
 ## notes
