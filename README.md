@@ -107,6 +107,19 @@ conf.set("spark.local.dir", "/ssd_fs/large_dir")
 - DataFrame 背后的计算引擎是 Spark SQL
 - RDD 的计算引擎是 Spark Core
 
+### sparkSession read
+
+```scala
+sparkSession.read.format("文件格式").option("key", "value").load("文件路径")
+```
+
+- 文件格式: CSV（Comma Separated Values）、Text、Parquet、ORC、JSON。Spark SQL
+- `option(选项 1, 值 1).option(选项 2, 值 2)`
+- 文件路径
+  - 本地文件系统中的“/dataSources/wikiOfSpark.txt”，
+  - HDFS 分布式文件系统中的“hdfs://hostname:port/myFiles/userProfiles.csv”，
+  - Amazon S3 上的“s3://myBucket/myProject/myFiles/results.parquet”
+
 ### 数据处理生命周期
 
 - 数据加载
@@ -131,7 +144,7 @@ conf.set("spark.local.dir", "/ssd_fs/large_dir")
   - collect
   - saveAsTextFile
 
-### 常用算子
+### 常用 RDD 算子
 
 - map、mapPartitions、flatMap 和 filter
   - 不会引入 shuffle
