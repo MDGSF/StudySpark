@@ -50,3 +50,10 @@ MASTER=spark://node0:7077 $SPARK_HOME/bin/run-example org.apache.spark.examples.
 - “–master yarn”就代表 YARN 模式
 
 用一句话来概括从 DAG 到 Stages 的拆分过程，那就是：以 Actions 算子为起点，从后向前回溯 DAG，以 Shuffle 操作为边界去划分 Stages。
+
+### 常用算子
+
+- map、mapPartitions、flatMap 和 filter
+  - 不会引入 shuffle
+- groupByKey、reduceByKey、aggregateByKey 和 sortByKey
+  - 会引入 shuffle
