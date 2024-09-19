@@ -3,6 +3,7 @@
 - <https://github.com/wulei-bj-cn/learn-spark>
 - spark on k8s: <https://spark.apache.org/docs/latest/running-on-kubernetes.html>
 - rdd: <https://spark.apache.org/docs/latest/rdd-programming-guide.html>
+- spark configuration: <https://spark.apache.org/docs/latest/configuration.html>
 
 ```sh
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyspark
@@ -27,6 +28,9 @@ docker run -it --rm \
 ```
 
 ## notes
+
+- spark-shell 用于启动交互式的分布式运行环境，
+- spark-submit 则用于向 Spark 计算集群提交分布式作业。
 
 在 Spark 中，创建 RDD 的典型方式有两种：
 
@@ -53,6 +57,40 @@ MASTER=spark://node0:7077 $SPARK_HOME/bin/run-example org.apache.spark.examples.
 - “–master yarn”就代表 YARN 模式
 
 用一句话来概括从 DAG 到 Stages 的拆分过程，那就是：以 Actions 算子为起点，从后向前回溯 DAG，以 Shuffle 操作为边界去划分 Stages。
+
+### 修改配置
+
+对于这 3 种方式，Spark 会按照“SparkConf 对象 -> 命令行参数 -> 配置文件”的顺序，依次读取配置项的参数值。对于重复设置的配置项，Spark 以前面的参数取值为准。
+
+#### 修改默认配置文件
+
+`spark-defaults.conf`
+
+```text
+spark.executor.cores 2
+spark.executor.memory 4
+gspark.local.dir /ssd_fs/large_dir
+```
+
+#### 修改命令行参数
+
+```sh
+spark-shell \
+  --master local[*] \
+  --conf spark.executor.cores=2 \
+  --conf spark.executor.memory=4g \
+  --conf spark.local.dir=/ssd_fs/large_dir
+```
+
+#### SparkConf 对象
+
+```scala
+import org.apache.spark.SparkConf
+val conf = new SparkConf()
+conf.set("spark.executor.cores", "2")
+conf.set("spark.executor.memory", "4g")
+conf.set("spark.local.dir", "/ssd_fs/large_dir")   
+```
 
 ### 数据处理生命周期
 
