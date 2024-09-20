@@ -30,9 +30,11 @@ docker run -it --rm \
   "/opt/spark/bin/spark-submit count_word.py"
 
 
+docker run -it --rm myspark01:0.0.2 bash
+docker run -it --rm myspark01:0.0.2 /opt/spark/bin/spark-shell
 docker run -it --rm \
   -v $(pwd):/opt/spark/work-dir \
-  myspark01:0.0.1 /opt/spark/bin/pyspark
+  myspark01:0.0.2 /opt/spark/bin/pyspark
 
 
 docker run -it --rm \
