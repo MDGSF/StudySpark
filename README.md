@@ -188,6 +188,24 @@ employeesDF.dropDuplicates("gender").show
 - employeesDF.na.drop 用于删除 DataFrame 中带 null 值的数据记录
 - employeesDF.na.fill(0) 则将 DataFrame 中所有的 null 值都自动填充为整数零
 
+#### where 算子
+
+想要过滤出所有性别为男的员工，我们就可以用 employeesDF.where(“gender = ‘Male’”) 来实现。
+
+#### withColumnRenamed 算子
+
+如果打算把 employeesDF 当中的“gender”重命名为“sex”
+
+```scala
+employeesDF.withColumnRenamed(“gender”, “sex”)。
+```
+
+#### withColumn 算子
+
+withColumnRenamed 是重命名现有的数据列，而 withColumn 则用于生成新的数据列。
+
+withColumn 和 selectExpr 有点像。
+
 ### RDD 数据处理生命周期
 
 - 数据加载
