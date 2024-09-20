@@ -237,6 +237,9 @@ withColumn 和 selectExpr 有点像。
   - NLJ（Nested Loop Join）
   - SMJ（Sort Merge Join）
   - HJ（Hash Join）
+- 从数据分发模式的角度出发，数据关联又可以分为
+  - Shuffle Join
+  - Broadcast Join
 
 #### 内关联和外关联
 
@@ -280,7 +283,40 @@ NLJ 算法的计算复杂度是 `O(M * N)`。
 
 如果还需要先排序，计算复杂度是 `O(M*log(M) + N*log(N))`。
 
+Sort Merge Join 就没有内存方面的限制。不论是排序、还是合并，SMJ 都可以利用磁盘来完成计算。所以，在稳定性这方面，SMJ 更胜一筹。
+
 #### HJ Hash Join
+
+- build 阶段，计算复杂度是 `O(N)`。
+- probe 阶段，计算复杂度是 `O(M)`。
+
+Hash Join 这种算法对于内存的要求比较高，适用于内存能够容纳基表数据的计算场景。
+
+#### NLJ vs SMJ vs HJ
+
+NLJ 效率最差。
+
+如果准备参与 Join 的两张表是有序表，那么这个时候采用 SMJ 算法来实现关联简直是再好不过了。
+
+执行高效的 HJ 和 SMJ 只能用于等值关联，也就是说关联条件必须是等式，像 salaries(“id”) < employees(“id”) 这样的关联条件，HJ 和 SMJ 是无能为力的。相反，NLJ 既可以处理等值关联（Equi Join），也可以应付不等值关联（Non Equi Join），可以说是数据关联在实现机制上的最后一道防线。
+
+#### Shuffle Join vs Broadcast Join
+
+Spark SQL 之所以在默认情况下一律采用 Shuffle Join，原因在于 Shuffle Join 的“万金油”属性。也就是说，在任何情况下，不论数据的体量是大是小、不管内存是否足够，Shuffle Join 在功能上都能够“不辱使命”，成功地完成数据关联的计算。然而，有得必有失，功能上的完备性，往往伴随着的是性能上的损耗。
+
+Broadcast Join 可以用来提升性能。
+对于参与 Join 的两张表，我们可以把其中较小的一个封装为广播变量，然后再让它们进行关联。
+
+尽管广播变量的创建与分发同样需要消耗网络带宽，但相比 Shuffle Join 中两张表的全网分发，因为仅仅通过分发体量较小的数据表来完成数据关联，Spark SQL 的执行性能显然要高效得多。
+
+#### join 组合策略
+
+- 对于等值关联（Equi Join），Spark SQL 优先考虑采用 Broadcast HJ 策略，其次是 Shuffle SMJ，最次是 Shuffle HJ。
+- 对于不等值关联（Non Equi Join），Spark SQL 优先考虑 Broadcast NLJ，其次是 Shuffle NLJ。
+
+不论是等值关联、还是不等值关联，只要 Broadcast Join 的前提条件成立，Spark SQL 一定会优先选择 Broadcast Join 相关的策略。
+
+Broadcast Join 得以实施的基础，是被广播数据表的全量数据能够完全放入 Driver 的内存、以及各个 Executors 的内存
 
 ### RDD 数据处理生命周期
 
