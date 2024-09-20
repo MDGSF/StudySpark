@@ -137,7 +137,51 @@ sparkSession.read.format("文件格式").option("key", "value").load("文件路�
 - createTempView 创建的临时表，其生命周期仅限于 SparkSession 内部
 - createGlobalTempView 创建的临时表，可以在同一个应用程序中跨 SparkSession 提供访问。
 
-### 数据处理生命周期
+### DataFrame 常用算子
+
+- 同源类算子
+  - 数据转换: map, mapPartitions, flatMap, filter
+  - 数据聚合: groupByKey, reduce
+  - 数据准备: union, sample
+  - 数据预处理: repartition, coalesce
+  - 结构收集: first, take, collect
+- 探索类算子
+  - 查看数据模式: columns, schema, printSchema
+  - 查看数据的模样: show
+  - 查看数据分布: describe
+  - 查看数据的执行计划: explain
+- 清洗类算子
+  - drop: 删除掉 DataFrame 的列数据
+  - distinct: 去重
+  - dropDuplicates: 按照指定列去重
+  - na: null 值处理
+
+#### drop 算子
+
+drop 算子允许开发者直接把指定列从 DataFrame 中予以清除。
+
+假设我们想把性别列清除，那么直接调用 employeesDF.drop(“gender”) 即可。
+
+如果要同时清除多列，只需要在 drop 算子中用逗号把多个列名隔开即可。
+
+#### distinct 算子
+
+当有多条数据记录的所有字段值都相同时，使用 distinct 可以仅保留其中的一条数据记录。
+
+#### dropDuplicates 算子
+
+指定列进行去重。
+
+```scala
+employeesDF.dropDuplicates("gender").show
+```
+
+#### na 算子
+
+- employeesDF.na.drop 用于删除 DataFrame 中带 null 值的数据记录
+- employeesDF.na.fill(0) 则将 DataFrame 中所有的 null 值都自动填充为整数零
+
+### RDD 数据处理生命周期
 
 - 数据加载
   - parallelize
