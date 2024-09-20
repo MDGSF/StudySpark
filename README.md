@@ -167,6 +167,8 @@ sparkSession.read.format("文件格式").option("key", "value").load("文件路�
   - groupBy: 按照某些列对数据做分组
   - agg: 分组后做数据聚合，Spark SQL 支持丰富的聚合算子
   - sort、orderBy: 按照某些列做排序
+- 持久化类算子
+  - write: 将 DataFrame 写入到文件系统、数据库等
 
 #### drop 算子
 
@@ -210,6 +212,17 @@ employeesDF.withColumnRenamed(“gender”, “sex”)。
 withColumnRenamed 是重命名现有的数据列，而 withColumn 则用于生成新的数据列。
 
 withColumn 和 selectExpr 有点像。
+
+#### write 算子
+
+在 read API 中，mode 选项键用于指定读取模式，如 permissive, dropMalformed, failFast。
+
+但在 write API 中，mode 用于指定“写入模式”，分别有 Append、Overwrite、ErrorIfExists、Ignore 这 4 种模式。
+
+- Append: 以追加的方式写入。
+- Overwrite: 覆盖写入。
+- ErrorIfExists: 如果目标存储路径已存在，则报异常。
+- Ignore: 如果目标存储路径已存在，则放弃数据写入。
 
 ### RDD 数据处理生命周期
 
