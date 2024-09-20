@@ -32,6 +32,11 @@ docker run -it --rm \
 
 docker run -it --rm \
   -v $(pwd):/opt/spark/work-dir \
+  myspark01:0.0.1 /opt/spark/bin/pyspark
+
+
+docker run -it --rm \
+  -v $(pwd):/opt/spark/work-dir \
   spark:3.5.2-scala2.12-java17-python3-ubuntu /opt/spark/bin/pyspark \
   --conf spark.executor.cores=4 \
   --conf spark.executor.memory=8g
