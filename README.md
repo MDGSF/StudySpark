@@ -110,6 +110,15 @@ conf.set("spark.local.dir", "/ssd_fs/large_dir")
 - DataFrame 背后的计算引擎是 Spark SQL
 - RDD 的计算引擎是 Spark Core
 
+### Spark SQL 开发入口
+
+Spark SQL 支持两类开发入口：
+
+- 一个是大家所熟知的结构化查询语言：SQL
+- 另一类是 DataFrame 开发算子。
+
+就开发效率与执行效率来说，二者并无优劣之分，选择哪种开发入口，完全取决于开发者的个人偏好与开发习惯。
+
 ### sparkSession read
 
 ```scala
@@ -122,6 +131,11 @@ sparkSession.read.format("文件格式").option("key", "value").load("文件路�
   - 本地文件系统中的“/dataSources/wikiOfSpark.txt”，
   - HDFS 分布式文件系统中的“hdfs://hostname:port/myFiles/userProfiles.csv”，
   - Amazon S3 上的“s3://myBucket/myProject/myFiles/results.parquet”
+
+### createTempView
+
+- createTempView 创建的临时表，其生命周期仅限于 SparkSession 内部
+- createGlobalTempView 创建的临时表，可以在同一个应用程序中跨 SparkSession 提供访问。
 
 ### 数据处理生命周期
 
