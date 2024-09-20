@@ -162,6 +162,11 @@ sparkSession.read.format("文件格式").option("key", "value").load("文件路�
   - withColumnRenamed: 字段重命名
   - withColumn: 生成新的数据列
   - explode: 展开数组类的数据列
+- 分析类算子
+  - join: 两个 DataFrame 之间做数据关联
+  - groupBy: 按照某些列对数据做分组
+  - agg: 分组后做数据聚合，Spark SQL 支持丰富的聚合算子
+  - sort、orderBy: 按照某些列做排序
 
 #### drop 算子
 
