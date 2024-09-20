@@ -155,6 +155,13 @@ sparkSession.read.format("文件格式").option("key", "value").load("文件路�
   - distinct: 去重
   - dropDuplicates: 按照指定列去重
   - na: null 值处理
+- 转换类算子
+  - select: 按照列名对数据做投影
+  - selectExpr: 以 SQL 语句为参数生成、提取数据
+  - where: 以 SQL 语句为参数做数据过滤
+  - withColumnRenamed: 字段重命名
+  - withColumn: 生成新的数据列
+  - explode: 展开数组类的数据列
 
 #### drop 算子
 
