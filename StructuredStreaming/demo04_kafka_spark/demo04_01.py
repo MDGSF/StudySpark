@@ -1,6 +1,5 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, avg
-from pyspark.sql.streaming import OutputMode, Trigger
 
 # 创建一个 SparkSession 对象
 spark = SparkSession.builder.appName("KafkaStreamingCPUAggregator").getOrCreate()
@@ -23,7 +22,7 @@ df_cpu_aggregated = (
 
 # 写入 Kafka 流
 query = (
-    df_cpu_aggregated.writeStream.outputMode(OutputMode.Complete())
+    df_cpu_aggregated.writeStream.outputMode("complete")
     .format("kafka")
     .option("kafka.bootstrap.servers", "localhost:9092")
     .option("topic", "cpu-monitor-agg-result")
