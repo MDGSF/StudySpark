@@ -26,4 +26,4 @@ RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pandas
 RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple matplotlib
 RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple nuscenes-devkit
 
-# USER spark
+USER spark
